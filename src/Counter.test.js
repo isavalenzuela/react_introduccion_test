@@ -5,8 +5,8 @@ import Counter from './Counter';
 
 test('render first time counter ', () => {
   render(<Counter />);
-  const count = screen.getByText('0');
-  expect(count).toBeInTheDocument();
+  const count = screen.getByTestId('countId');
+  expect(count.textContent).toBe('0');
 });
 
 // validar que el usuario ingreso el email.
@@ -22,11 +22,31 @@ test('test first click on counter ', () => {
   // simula un click en el boton
   fireEvent.click(button);
   const count = screen.getByTestId('countId');
-  expect(count).toBeInTheDocument();
+  expect(count.textContent).toBe('1');
 });
 
 test('show title', () => {
-  render(<Counter/>)
-  const title = screen.getByText('This is a counter:')
-  expect(title).toBeInTheDocument();
-})
+  render(<Counter />);
+  const title = screen.getByText('This is a counter:');
+  expect(title).not.toBeNull();
+});
+
+test('test first click on less counter ', () => {
+  const { container } = render(<Counter />);
+  const button = screen.getByTestId("less");
+  // simula un click en el boton
+  fireEvent.click(button);
+  const count = screen.getByTestId('countId');
+  expect(count.textContent).toBe('0');
+});
+
+test('test click plus and less in a row ', () => {
+  render(<Counter />);
+  const plusButton = screen.getByTestId("plus");
+  const lessButton = screen.getByTestId("less");
+  // simula un click en el boton
+  fireEvent.click(plusButton);
+  fireEvent.click(lessButton);
+  const count = screen.getByTestId('countId');
+  expect(count.textContent).toBe('0');
+});
